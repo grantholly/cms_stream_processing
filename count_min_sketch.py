@@ -14,6 +14,10 @@ class CountMinSketch(object):
     w columns for size of d row
     greater w reduces hash collisions and increases accuracy
     at the cost of memory
+    sizing the sketch means choosing a value epsilon
+    where epsilon is the error in counting within a factor
+    of epsilon with a probability of sigma
+    size = e/epsilon hashes = ceil(ln(1/sigma)) 
     """
     def __init__(self, size, hashes):
         self.size = size
