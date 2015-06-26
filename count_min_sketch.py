@@ -53,16 +53,32 @@ def fast_linear_congruential_generator(a=11, b=37, c=1):
     p = 65537
     return a * b + c % p
     
+def tuple_test():
+    cms = CountMinSketch(size=100, hashes=2)
 
-cms = CountMinSketch(size=100, hashes=2)
+    for i in (1,1,1,1,1,2,3,2,2,8,8,3,0,0,1,34,7657,12,68,9,1,28,735,87,3,4,4,5,6,7,81,4,3,5,6,4,2,1,1,1,3,6,2,7,9,6,3,2,4,6,8,9,9,9,7,3,2,45,7,3,65,3,5,9,4,1,23,5,12,1,1,1,1,34,2,7,1,2,8,2,67,9,34,12,56,79,4,2,2,7,235,86,685,):
+        cms.insert(str(i))
 
-for i in (1,1,1,1,1,2,3,2,2,8,8,3,0,0,1,34,7657,12,68,9,1,28,735,87,3,4,4,5,6,7,81,4,3,5,6,4,2,1,1,1,3,6,2,7,9,6,3,2,4,6,8,9,9,9,7,3,2,45,7,3,65,3,5,9,4,1,23,5,12,1,1,1,1,34,2,7,1,2,8,2,67,9,34,12,56,79,4,2,2,7,235,86,685,):
-    cms.insert(str(i))
+    print(cms.__dict__)
 
-print(cms.__dict__)
+    print(cms.count("1"))
 
-print(cms.count("1"))
+def file_test():
+    """
+    each messages is a json object with UUIDs
+    for non distinct element you must select a subset
+    of the JSON object
+    """
+    cms = CountMinSketch(size=200, hashes=4)
 
+    with open('/Users/rant.holly/for-fun/python/message.2014-08-16-17-utc', 'r') as f:
+        for line in f:
+            cms.insert(line)
+            print(line)
+            
+
+tuple_test()
+        
 
         
     
