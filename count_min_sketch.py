@@ -1,10 +1,6 @@
 import mmh3
 
 
-TODO = """
-"""
-
-
 class CountMinSketch(object):
     """
     linear write and read time with fixed memory size
@@ -73,7 +69,7 @@ def file_test():
         print(cms.count("COMCAST"))
 
 
-tuple_test()
+# tuple_test()
         
 
         
