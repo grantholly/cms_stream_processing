@@ -2,7 +2,6 @@ import mmh3
 
 
 TODO = """
-fix list indices if mmh3 has to take strings
 """
 
 
@@ -47,16 +46,7 @@ class CountMinSketch(object):
                 search_key = mmh3.hash(item, v) % self.size
                 counts.append(k[search_key])
         return min(counts)
-
-
-def fast_linear_congruential_generator(a=11, b=37, c=1):
-    """
-    a, b, and c values were looked up from a table at
-    http://www.cs.princeton.edu/courses/archive/spring03/cs126/assignments/cycle.html
-    """
-    p = 65537
-    return a * b + c % p
-    
+ 
 def tuple_test():
     cms = CountMinSketch(size=100, hashes=2)
 
@@ -75,11 +65,13 @@ def file_test():
     """
     cms = CountMinSketch(size=200, hashes=4)
 
-    with open('/Users/rant.holly/for-fun/python/message.2014-08-16-17-utc', 'r') as f:
+    with open('/Users/grant.holly/for-fun/python/message.2014-08-16-17-utc', 'r') as f:
         for line in f:
-            cms.insert(line)
-            print(line)
-            
+            for word in line.split(":"):
+                cms.insert(word)
+                print(word)
+        print(cms.count("COMCAST"))
+
 
 tuple_test()
         
