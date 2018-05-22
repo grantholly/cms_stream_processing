@@ -5,7 +5,7 @@ class CountMinSketch(object):
     """
     linear write and read time with fixed memory size
     with a tunable accuracy 
-    d rows for d has functions
+    d rows for d hash functions
     w columns for size of d row
     greater w reduces hash collisions and increases accuracy
     at the cost of memory
@@ -25,10 +25,9 @@ class CountMinSketch(object):
 
     def insert(self, item):
         """
-        right now this just works with ints
         have something here to check types so that
         integers get the fast linear congruential generator
-        and everything else gets murmur3
+        and everything else gets murmur3?  premature optimization trap?
         https://en.wikipedia.org/wiki/Linear_congruential_generator
         """
         for i in range(self.hashes):
@@ -37,39 +36,11 @@ class CountMinSketch(object):
             
     def count(self, item):
         counts = []
+
         for k, v in zip(self.sketch, range(self.hashes)):
-            for j in k:
-                search_key = mmh3.hash(item, v) % self.size
-                counts.append(k[search_key])
+            search_key = mmh3.hash(item, v) % self.size
+            counts.append(k[search_key])
         return min(counts)
- 
-def tuple_test():
-    cms = CountMinSketch(size=100, hashes=2)
-
-    for i in (1,1,1,1,1,2,3,2,2,8,8,3,0,0,1,34,7657,12,68,9,1,28,735,87,3,4,4,5,6,7,81,4,3,5,6,4,2,1,1,1,3,6,2,7,9,6,3,2,4,6,8,9,9,9,7,3,2,45,7,3,65,3,5,9,4,1,23,5,12,1,1,1,1,34,2,7,1,2,8,2,67,9,34,12,56,79,4,2,2,7,235,86,685,):
-        cms.insert(str(i))
-
-    print(cms.__dict__)
-
-    print(cms.count("1"))
-
-def file_test():
-    """
-    each messages is a json object with UUIDs
-    for non distinct element you must select a subset
-    of the JSON object
-    """
-    cms = CountMinSketch(size=200, hashes=4)
-
-    with open('/Users/grant.holly/for-fun/python/message.2014-08-16-17-utc', 'r') as f:
-        for line in f:
-            for word in line.split(":"):
-                cms.insert(word)
-                print(word)
-        print(cms.count("COMCAST"))
-
-
-# tuple_test()
         
 
         
